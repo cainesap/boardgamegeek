@@ -40,10 +40,10 @@ shinyUI(fluidPage(
         h4("Filters"),
         sliderInput("reviews", "Minimum number of ratings on BoardGameGeek (>99)",
           100, 45000, 3000, step = 100),
-        textInput("minyear", label = "Earliest year of publication (>=0)", value = "1977"),
-        textInput("maxyear", label = "Latest year of publication (<=2014)", value = "2014"),
+        textInput("minyear", label = "Earliest year of publication (>=-3500 [yes, 3500 B.C.!])", value = "1977"),
+        textInput("maxyear", label = "Latest year of publication (<= 2014)", value = "2014"),
         sliderInput("owned", "Number of copies owned", 0, 60000, value = c(0, 60000), step = 1000),
-        sliderInput("timed", "Duration of game (mins)", 0, 60000, value = c(0, 60000), step = 10),
+        sliderInput("timed", "Duration of game (mins)", 0, 720, value = c(0, 720), step = 10),
         sliderInput("maxplyrs", "Max number of players", 0, 20, value = 6, step = 1)
       )
     ),
@@ -55,7 +55,7 @@ shinyUI(fluidPage(
       wellPanel(
         span("Number of boardgames selected:", textOutput("n_games"),
         tags$small(paste0(
-          "There are a total of 5067 games in this dataset."))
+          "There are a total of 5060 games in this dataset."))
         )
       ),
 
@@ -71,7 +71,9 @@ shinyUI(fluidPage(
 	  " | ",
   	  "data source: ", tags$a(href="https://github.com/rasmusgreve/BoardGameGeek", "@rasmusgreve on GitHub"),
 	  " | ",
-  	  "code: ", tags$a(href="https://github.com/cainesap/boardgamegeek", "@cainesap on GitHub")
+  	  "code: ", tags$a(href="https://github.com/cainesap/boardgamegeek", "@cainesap on GitHub"),
+	  " | ",
+	  "original design: ", tags$a(href="http://shiny.rstudio.com/gallery/movie-explorer.html", "@garrettgman's Shiny Movie Explorer")
         )
       )
 
