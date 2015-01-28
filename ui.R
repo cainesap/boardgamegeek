@@ -20,7 +20,7 @@ actionLink <- function(inputId, ...) {
 shinyUI(fluidPage(
 
   ## TITLE
-  titlePanel("Boardgamegeek Data Explorer"),
+  titlePanel("BoardGameGeek Data Explorer"),
 
   ## NEW ROW
   fluidRow(
@@ -55,8 +55,7 @@ shinyUI(fluidPage(
       wellPanel(
         span("Number of boardgames selected:", textOutput("n_games"),
         tags$small(paste0(
-          "Note: there are a total of 5067 games in this dataset, extracted from boardgamegeek via @rasmusgreve on GitHub [https://github.com/rasmusgreve/BoardGameGeek]"
-        ))
+          "There are a total of 5067 games in this dataset."))
         )
       ),
 
@@ -64,6 +63,16 @@ shinyUI(fluidPage(
       ggvisOutput("plot1"),
       wellPanel(
         textInput("bgname", "Name contains (e.g. Monopoly)")
+      ),
+
+      wellPanel(
+        span(
+  	  "inspiration: ", tags$a(href="http://fivethirtyeight.com/features/designing-the-best-board-game-on-the-planet/", "@ollie on FiveThirtyEight"),
+	  " | ",
+  	  "data source: ", tags$a(href="https://github.com/rasmusgreve/BoardGameGeek", "@rasmusgreve on GitHub"),
+	  " | ",
+  	  "code: ", tags$a(href="https://github.com/cainesap/boardgamegeek", "@cainesap on GitHub")
+        )
       )
 
     )
