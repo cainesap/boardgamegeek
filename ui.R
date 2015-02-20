@@ -44,7 +44,7 @@ shinyUI(fluidPage(
         textInput("maxyear", label = "Latest year of publication (<= 2014)", value = "2014"),
         sliderInput("owned", "Number of copies owned", 0, 60000, value = c(0, 60000), step = 1000),
         sliderInput("timed", "Duration of game (mins)", 0, 720, value = c(0, 720), step = 10),
-        sliderInput("maxplyrs", "Max number of players", 0, 20, value = 6, step = 1)
+        sliderInput("maxplyrs", "Maximum number of players", 0, 20, value = c(0, 10), step = 1)
       )
     ),
 
@@ -65,6 +65,7 @@ shinyUI(fluidPage(
         textInput("bgname", "Name contains (e.g. Monopoly)")
       ),
 
+      ## SOURCES / LINKS
       wellPanel(
         span(
   	  "inspiration: ", tags$a(href="http://fivethirtyeight.com/features/designing-the-best-board-game-on-the-planet/", "@ollie on FiveThirtyEight"),
@@ -75,8 +76,20 @@ shinyUI(fluidPage(
 	  " | ",
 	  "original design: ", tags$a(href="http://shiny.rstudio.com/gallery/movie-explorer.html", "@garrettgman's Shiny Movie Explorer")
         )
-      )
+      ),
 
+      ## MECHANICS
+      wellPanel(
+        h6("Mechanics:"),
+	checkboxInput("mechBool", "Show mechanics?", value = FALSE),
+        column(3,
+	  uiOutput("mechDynRadio")
+	),
+	column(6,
+	  uiOutput("mechDynChecks")
+	)
+      )
     )
+
   )
 ))

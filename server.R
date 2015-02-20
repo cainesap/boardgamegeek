@@ -16,7 +16,7 @@ bgtbl <- tbl(bgdb, "bgg")  # load 'bgg' table from db
 # filter out games with fewer than 50 reviews, selecting specified columns
 bgg_games <- filter(bgtbl, users_rated > 49) %>% 
   select(id, name, year_published, min_players, max_players, playingtime, min_age, users_rated,
-    average_rating, rating_stddev, num_owned)
+    average_rating, rating_stddev, num_owned, mechanics)
 
 
 ## Server commands, to run app in conjunction with 'ui.R'
@@ -27,7 +27,8 @@ shinyServer(function(input, output, session) {
     reviews <- input$reviews
     minyear <- input$minyear
     maxyear <- input$maxyear
-    maxplyrs <- input$maxplyrs
+    lowermaxplyrs <- input$maxplyrs[1]
+    uppermaxplyrs <- input$maxplyrs[2]
     minowned <- input$owned[1]
     maxowned <- input$owned[2]
     mindur <- input$timed[1]
@@ -39,7 +40,8 @@ shinyServer(function(input, output, session) {
         users_rated >= reviews,
         year_published >= minyear,
         year_published <= maxyear,
-        max_players <= maxplyrs,
+        max_players >= lowermaxplyrs,
+        max_players <= uppermaxplyrs,
         num_owned >= minowned,
         num_owned <= maxowned,
         playingtime >= mindur,
@@ -53,8 +55,36 @@ shinyServer(function(input, output, session) {
       g <- g %>% filter(name %like% namesearch)
     }
 
-    # return data.frame 'g'
+    # convert to data frame
     g <- as.data.frame(g)
+
+    # filter by mechanics, if in the input
+    if (!is.null(input$mech) && input$mech != "") {
+      mechs <- input$mech
+      mechlen <- length(mechs)
+      # how many mechanics given? if only 1, a straightfwd grep...
+      if (mechlen == 1) {
+        g <- g[grep(mechs, g$mechanics, perl = TRUE), ]
+      } else {  # if > 1, is it a conjunctive or disjunctive match?
+        if (input$logic == "disj") {
+	  # build regex for disjunctive grep
+      	  regex <- mechs[1]
+	  for (n in (2:mechlen)) {
+	    regex <- paste0(regex, "|", mechlen[n])
+	  }
+          g <- g[grep(regex, g$mechanics, perl = TRUE), ]
+	} else {
+	  # build regex for conjunctive grepl
+	  regex <- paste0("(?=.*", mechs[1], ")")
+	  for (n in (2:mechlen)) {
+	    regex <- paste0(regex, "(?=.*", mechlen[n], ")")
+	  }
+          g <- g[grepl(regex, g$mechanics, perl = TRUE), ]
+	}
+      }
+    }
+
+    # after all filtering, return data.frame 'g'
     g
 
   })
@@ -118,5 +148,23 @@ shinyServer(function(input, output, session) {
 
   ## Number of games in the current dataset [reactive]
   output$n_games <- renderText({ nrow(games()) })
+
+  ## Show mechanic filters? Dynamic UI: 
+  output$mechDynRadio <- renderUI({
+    if (is.null(input$mechBool))
+      return()
+
+    switch(input$mechBool,
+      "TRUE" = radioButtons("logic", label = "Logical operator", choices = list("disjunctive OR" = "disj", "conjunctive AND" = "conj"), selected = "disj")
+    )
+  })
+  output$mechDynChecks <- renderUI({
+    if (is.null(input$mechBool))
+      return()
+
+    switch(input$mechBool,
+      "TRUE" = checkboxGroupInput("mech", choices = mech_vars, label = "", selected = "2001")
+    )
+  })
 
 })
