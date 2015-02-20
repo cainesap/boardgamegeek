@@ -10,10 +10,12 @@ Inspiration: http://fivethirtyeight.com/features/designing-the-best-board-game-o
 ## Contents
 - `bgg.sqlite3`: BoardGameGeek data as an SQLite database;
 - `boardgamegeek.csv`: download of [`data_w_right_ratings2014-05-02.csv`](https://github.com/rasmusgreve/BoardGameGeek/blob/master/BoardGameGeek/data_w_right_ratings2014-05-02.csv) from @rasmusgreve's GitHub repo;
-- `global.R`: global axis variables;
+- `global.R`: global variables;
+- `linkIdNames.txt`: list of IDs and values, including the mechanics (from @rasmusgreve's GitHub repo);
 - `populate_db.R`: data pre-processing to convert .csv to .sqlite3;
 - `server.R`: works with `ui.R` to define Shiny app;
 - `ui.R`: works with `server.R` to define Shiny app.
+- `v0.1`: first release.
 
 To run locally, change to the boardgamegeek directory and --
 ```
