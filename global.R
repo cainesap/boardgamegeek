@@ -12,6 +12,7 @@ axis_vars <- c(
   "Game duration" = "playingtime"
 )
 
+## mechanics, from linkIdNames.txt
 mech_vars <- c(
   "Action Point Allowance System" = "2001",
   "Tile Placement" = "2002",
@@ -65,3 +66,5 @@ mech_vars <- c(
   "Take That" = "2686",
   "Action / Movement Programming" = "2689"
 )
+## sort this vector by its names, alpha
+mech_vars <- mech_vars[order(names(mech_vars))]

@@ -80,14 +80,10 @@ shinyUI(fluidPage(
 
       ## MECHANICS
       wellPanel(
-        h6("Mechanics:"),
-	checkboxInput("mechBool", "Show mechanics?", value = FALSE),
-        column(3,
-	  uiOutput("mechDynRadio")
-	),
-	column(6,
-	  uiOutput("mechDynChecks")
-	)
+        h4("Mechanics:"),
+	radioButtons("mechLogic", label = "logical operator",
+	  choices = list("disjunctive OR" = "disj", "conjunctive AND" = "conj"), selected = "disj"),
+	checkboxGroupInput("mech", choices = mech_vars, label = "", selected = NULL)
       )
     )
 

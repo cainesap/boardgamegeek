@@ -58,7 +58,7 @@ shinyServer(function(input, output, session) {
     # convert to data frame
     g <- as.data.frame(g)
 
-    # filter by mechanics, if in the input
+    # filter by mechanics, if selected
     if (!is.null(input$mech) && input$mech != "") {
       mechs <- input$mech
       mechlen <- length(mechs)
@@ -66,7 +66,7 @@ shinyServer(function(input, output, session) {
       if (mechlen == 1) {
         g <- g[grep(mechs, g$mechanics, perl = TRUE), ]
       } else {  # if > 1, is it a conjunctive or disjunctive match?
-        if (input$logic == "disj") {
+        if (input$mechLogic == "disj") {
 	  # build regex for disjunctive grep
       	  regex <- mechs[1]
 	  for (n in (2:mechlen)) {
@@ -148,23 +148,5 @@ shinyServer(function(input, output, session) {
 
   ## Number of games in the current dataset [reactive]
   output$n_games <- renderText({ nrow(games()) })
-
-  ## Show mechanic filters? Dynamic UI: 
-  output$mechDynRadio <- renderUI({
-    if (is.null(input$mechBool))
-      return()
-
-    switch(input$mechBool,
-      "TRUE" = radioButtons("logic", label = "Logical operator", choices = list("disjunctive OR" = "disj", "conjunctive AND" = "conj"), selected = "disj")
-    )
-  })
-  output$mechDynChecks <- renderUI({
-    if (is.null(input$mechBool))
-      return()
-
-    switch(input$mechBool,
-      "TRUE" = checkboxGroupInput("mech", choices = mech_vars, label = "", selected = "2001")
-    )
-  })
 
 })
