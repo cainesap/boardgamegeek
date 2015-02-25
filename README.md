@@ -14,8 +14,9 @@ Inspiration: http://fivethirtyeight.com/features/designing-the-best-board-game-o
 - `linkIdNames.txt`: list of IDs and values, including the mechanics (from @rasmusgreve's GitHub repo);
 - `populate_db.R`: data pre-processing to convert .csv to .sqlite3;
 - `server.R`: works with `ui.R` to define Shiny app;
-- `ui.R`: works with `server.R` to define Shiny app.
-- `v0.1`: first release.
+- `ui.R`: works with `server.R` to define Shiny app;
+- `versioning`: previous releases;
+- `www`: [Bootswatch](http://bootswatch.com/) CSS, Yeti theme.
 
 To run locally, change to the boardgamegeek directory and --
 ```

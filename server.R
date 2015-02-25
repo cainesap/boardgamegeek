@@ -16,7 +16,7 @@ bgtbl <- tbl(bgdb, "bgg")  # load 'bgg' table from db
 # filter out games with fewer than 50 reviews, selecting specified columns
 bgg_games <- filter(bgtbl, users_rated > 49) %>% 
   select(id, name, year_published, min_players, max_players, playingtime, min_age, users_rated,
-    average_rating, rating_stddev, num_owned, mechanics)
+    average_rating, rating_stddev, num_owned, mechanics, best_num_players)
 
 
 ## Server commands, to run app in conjunction with 'ui.R'
@@ -82,6 +82,12 @@ shinyServer(function(input, output, session) {
           g <- g[grepl(regex, g$mechanics, perl = TRUE), ]
 	}
       }
+    }
+
+    # filter by 'best' number of players, if given
+    if (input$best > 0) {
+      regex <- input$best
+      g <- g[grep(regex, g$best_num_players, perl = TRUE), ]
     }
 
     # after all filtering, return data.frame 'g'

@@ -16,8 +16,8 @@ actionLink <- function(inputId, ...) {
 }
 
 
-## UI
-shinyUI(fluidPage(
+## UI, with 'Yeti' theme from Bootswatch http://bootswatch.com/yeti/
+shinyUI(fluidPage(theme = "bootstrap.css",
 
   ## TITLE
   titlePanel("BoardGameGeek Data Explorer"),
@@ -42,9 +42,10 @@ shinyUI(fluidPage(
           100, 45000, 3000, step = 100),
         textInput("minyear", label = "Earliest year of publication (>=-3500 [yes, 3500 B.C.!])", value = "1977"),
         textInput("maxyear", label = "Latest year of publication (<= 2014)", value = "2014"),
-        sliderInput("owned", "Number of copies owned", 0, 60000, value = c(0, 60000), step = 1000),
-        sliderInput("timed", "Duration of game (mins)", 0, 720, value = c(0, 720), step = 10),
-        sliderInput("maxplyrs", "Maximum number of players", 0, 20, value = c(0, 10), step = 1)
+        sliderInput("owned", label = "Number of copies owned", 1, 60000, value = c(1, 60000), step = 1000),
+        sliderInput("timed", label = "Duration of game (mins)", 1, 720, value = c(1, 720), step = 10),
+        sliderInput("maxplyrs", label = "Maximum number of players", 1, 21, value = c(1, 10), step = 1),
+        selectInput("best", label = "Best number of players", choices = seq(0, 20), selected = 0)
       )
     ),
 
@@ -55,7 +56,7 @@ shinyUI(fluidPage(
       wellPanel(
         span("Number of boardgames selected:", textOutput("n_games"),
         tags$small(paste0(
-          "There are a total of 5060 games in this dataset."))
+          "There are a total of 4948 games in this dataset."))
         )
       ),
 
@@ -63,6 +64,13 @@ shinyUI(fluidPage(
       ggvisOutput("plot1"),
       wellPanel(
         textInput("bgname", "Name contains (e.g. Monopoly)")
+      ),
+
+      ## MECHANICS
+      wellPanel(
+        h4("Mechanics"),
+	selectInput("mech", "", mech_vars, multiple = TRUE, selectize = TRUE),
+	radioButtons("mechLogic", label = "logical operator", choices = list("disjunctive OR" = "disj", "conjunctive AND" = "conj"), selected = "disj", inline = TRUE)
       ),
 
       ## SOURCES / LINKS
@@ -76,16 +84,7 @@ shinyUI(fluidPage(
 	  " | ",
 	  "original design: ", tags$a(href="http://shiny.rstudio.com/gallery/movie-explorer.html", "@garrettgman's Shiny Movie Explorer")
         )
-      ),
-
-      ## MECHANICS
-      wellPanel(
-        h4("Mechanics:"),
-	radioButtons("mechLogic", label = "logical operator",
-	  choices = list("disjunctive OR" = "disj", "conjunctive AND" = "conj"), selected = "disj"),
-	checkboxGroupInput("mech", choices = mech_vars, label = "", selected = NULL)
       )
     )
-
   )
 ))
