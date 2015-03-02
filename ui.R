@@ -19,6 +19,14 @@ actionLink <- function(inputId, ...) {
 ## UI, with 'Yeti' theme from Bootswatch http://bootswatch.com/yeti/
 shinyUI(fluidPage(theme = "bootstrap.css",
 
+  ## prevent grey-out on loss of connection
+  tags$head(tags$style(type="text/css",
+    "body.disconnected {
+      background-color: inherit;
+      opacity: 1;
+    }"
+  )),
+
   ## TITLE
   titlePanel("BoardGameGeek Data Explorer"),
 
@@ -68,7 +76,7 @@ shinyUI(fluidPage(theme = "bootstrap.css",
 
       ## MECHANICS
       wellPanel(
-        h4("Mechanics"),
+        h4("Mechanics (select from list)"),
 	selectInput("mech", "", mech_vars, multiple = TRUE, selectize = TRUE),
 	radioButtons("mechLogic", label = "logical operator", choices = list("disjunctive OR" = "disj", "conjunctive AND" = "conj"), selected = "disj", inline = TRUE)
       ),
